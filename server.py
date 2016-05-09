@@ -17,27 +17,47 @@ DIR = 'dir'
 @app.route('/', defaults={'path': './'})
 @app.route('/<path:path>')
 def fileDispatch(path):
-    if '..' in path or path.startswith('/'):
+    if '..' in path:
+        print '.. in path'
         abort(404)
 
     fullpath = flask.safe_join(app.config['root'], path)
+    path = '/' + path
     type = getFileType(fullpath)
     if type == WIKI:
-        return markdownFile(fullpath, '/'+path)
+        return markdownFile(fullpath, path)
+
     elif type == NON_WIKI:
         return notMarkdown(fullpath)
+
     elif type == DIR:
         # try index
-        return listing(fullpath, '/'+path)
+        index = findIndex(fullpath, path)
+        if index:
+            return flask.redirect(index)
+        return listing(fullpath, path)
+
     else:
+        # list override?
+        context, file = os.path.split(fullpath)
+        if file == '_directory_':
+            route, dir = os.path.split(path)
+            return listing(context, route)
         # try w/o extension
         file, ext = os.path.splitext(path)
         if ext == '':
             for ext in app.config['wikiExt']:
-                if os.path.exists(path + ext):
-                    return flask.redirect('/' + path + ext)
-        print path
+                if os.path.exists(fullpath + ext):
+                    return flask.redirect(path + ext)
+        print 'fileDispatch', path, fullpath
         flask.abort(404)
+
+def findIndex(fullpath, route):
+    for ext in app.config['wikiExt']:
+        ipath = flask.safe_join(fullpath, 'index' + ext)
+        if os.path.exists(ipath):
+            return flask.safe_join(route, 'index' + ext)
+    return None
 
 # req full path
 def getFileType(path):

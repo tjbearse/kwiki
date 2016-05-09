@@ -134,8 +134,7 @@ body {
       font-weight: normal; }
   body #footer {
     color: #777;
-    font-size: 13px;
-    text-transform: lowercase; }
+    font-size: 13px; }
   body.listing table#pages td.size, body.listing table#subdirs td.size {
     font-family: Menlo, 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, 'Courier 10 Pitch', 'Courier New', monospace;
     text-align: right; }
