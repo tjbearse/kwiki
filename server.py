@@ -7,23 +7,20 @@ app = flask.Flask(__name__)
 app.config['DEBUG'] = True
 
 app.config['wikiExt'] = ['.md', '.wiki', '']
-app.config['markdown'] = {}
+app.config['markdownSettings'] = {}
 app.config['root'] = os.getcwd()
-
-Markdown = markdown.Markdown(**app.config['markdown'])
 
 @app.route('/', defaults={'path': './'})
 @app.route('/<path:path>')
-def file(path):
+def fileDispatch(path):
     if '..' in path or path.startswith('/'):
         abort(404)
 
     fullpath = flask.safe_join(app.config['root'], path)
-    print('full', fullpath)
     if(os.path.isfile(fullpath)):
         file, ext = os.path.splitext(fullpath)
         if(ext in app.config['wikiExt']):
-            return markdownFile(path)
+            return markdownFile(fullpath)
         else:
             return notMarkdown(path)
     else:
@@ -42,14 +39,13 @@ def notMarkdown(path):
 def markdownFile(wikipage):
     istream = StringIO()
     try:
-        Markdown.convertFile(input=wikipage, output=istream)
+        markdown.markdownFromFile(input=wikipage, output=istream, **app.config['markdownSettings'])
         md = flask.Markup(istream.getvalue())
         return flask.render_template('document.html', content=md)
     except Exception as e:
-        print file, e
+        print 'file failed', wikipage, e.args
         flask.abort(404)
     finally:
-        Markdown.reset()
         istream.close()
 
 """
@@ -78,7 +74,7 @@ def listing(directory):
         # filter .stuff
         return flask.render_template('listing.html')
     except Exception as e:
-        print contents, e
+        print 'directory failed:', contents, e
         flask.abort(404)
 
 if __name__ == '__main__':
