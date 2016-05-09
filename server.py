@@ -22,7 +22,7 @@ def fileDispatch(path):
         if(ext in app.config['wikiExt']):
             return markdownFile(fullpath)
         else:
-            return notMarkdown(path)
+            return notMarkdown(fullpath)
     else:
         return listing(path)
 
@@ -74,8 +74,12 @@ def listing(directory):
         # filter .stuff
         return flask.render_template('listing.html')
     except Exception as e:
-        print 'directory failed:', contents, e
+        print 'directory failed:', e
         flask.abort(404)
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return flask.render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run()

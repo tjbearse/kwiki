@@ -53,21 +53,20 @@ class MarkDownTests(unittest.TestCase):
             self.assertEqual(r.data, '/start/stuff/wiki.md')
 
 
-    #fileDispatch
-        # full path building
-        # md files -> md
-            # no ext case
-        # non md files -> nonmd
-        # dir -> dir
-    #notMarkdown
-        # don't test if fileDispatch is well tested
-    #markdownFile
-        # converts file
-        # renders content into "content" slot of document.html template
-    #listing
-        # sep files vs dirs vs pages
-        # filter .stuff
-    # crumbs
+class NonMarkDownTests(unittest.TestCase):
+    def setUp(self):
+        server.app.config['TESTING'] = True
+        server.app.config['root'] = '/start/'
+        setup_with_context_manager(self, monkey_patch(os.path, 'isfile', truth))
+        setup_with_context_manager(self, monkey_patch(flask, 'send_file', lambda path: path))
+        self.app = server.app.test_client()
+
+    def tearDown(self):
+        pass
+
+    def test_returnsFile(self):
+        r = self.app.get('/stuff/wiki.jpg')
+        self.assertEqual(r.data, '/start/stuff/wiki.jpg')
 
 if __name__ == '__main__':
     unittest.main()
