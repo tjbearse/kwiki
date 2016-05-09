@@ -6,9 +6,13 @@ import os
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
 
-app.config['wikiExt'] = ['.md', '.wiki', '']
+app.config['wikiExt'] = ['.md', '.wiki']
 app.config['markdownSettings'] = {}
 app.config['root'] = os.getcwd()
+
+WIKI = 'wiki'
+NON_WIKI = 'file'
+DIR = 'dir'
 
 @app.route('/', defaults={'path': './'})
 @app.route('/<path:path>')
@@ -17,14 +21,24 @@ def fileDispatch(path):
         abort(404)
 
     fullpath = flask.safe_join(app.config['root'], path)
-    if(os.path.isfile(fullpath)):
-        file, ext = os.path.splitext(fullpath)
-        if(ext in app.config['wikiExt']):
-            return markdownFile(fullpath)
-        else:
-            return notMarkdown(fullpath)
+    type = getFileType(fullpath)
+    if(type == WIKI):
+        return markdownFile(fullpath, '/'+path)
+    elif(type == NON_WIKI):
+        return notMarkdown(fullpath)
     else:
-        return listing(path)
+        return listing(fullpath, '/'+path)
+
+# req full path
+def getFileType(path):
+    if(os.path.isfile(path)):
+        file, ext = os.path.splitext(path)
+        if(ext in app.config['wikiExt']):
+            return WIKI
+        else:
+            return NON_WIKI
+    else:
+        return DIR
 
 def notMarkdown(path):
     return flask.send_file(path)
@@ -36,12 +50,15 @@ def notMarkdown(path):
   "crumbs": [("index", "/"), ("some-document", None)] # Breadcrumbs
 }
 """
-def markdownFile(wikipage):
+def markdownFile(wikipage, route):
     istream = StringIO()
     try:
         markdown.markdownFromFile(input=wikipage, output=istream, **app.config['markdownSettings'])
         md = flask.Markup(istream.getvalue())
-        return flask.render_template('document.html', content=md)
+        return flask.render_template('document.html',
+                    content=md,
+                    crumbs=buildCrumbs(route)
+                )
     except Exception as e:
         print 'file failed', wikipage, e.args
         flask.abort(404)
@@ -66,16 +83,73 @@ def markdownFile(wikipage):
             "title": u"Hello again."}],
  "sub_directories": [{"basename": "subdir", "href": "/subdir/"}]}
 """
-def listing(directory):
+def listing(directory, route):
     print('directory', directory)
     try:
-        contents = os.listdir(directory)
-        # sep files vs dirs
-        # filter .stuff
-        return flask.render_template('listing.html')
+        pages = []
+        files = []
+        subdirs = []
+        for f in os.listdir(directory):
+            if f[0] == '.':
+                continue
+            fullpath = flask.safe_join(directory, f)
+            ftype = getFileType(fullpath)
+            if ftype == WIKI:
+                pages.append(getFileInfo(f, fullpath, route))
+            elif ftype == NON_WIKI:
+                files.append(getFileInfo(f, fullpath, route))
+            else:
+                subdirs.append(getDirInfo(f, route))
+
+        return flask.render_template('listing.html',
+                crumbs=buildCrumbs(route),
+                directory=os.path.basename(directory),
+                files=files,
+                pages=pages,
+                sub_directories=subdirs
+                )
     except Exception as e:
         print 'directory failed:', e
         flask.abort(404)
+
+def getDirInfo(d, relRoute):
+    return {
+            "basename": d,
+            "href": flask.safe_join(relRoute, d)
+        }
+
+def getFileInfo(file, fullpath, relRoute):
+    basename = os.path.basename(file)
+    title, ext = os.path.splitext(basename)
+    return {
+            "title": title,
+            "basename": basename,
+            "href": flask.safe_join(relRoute, file),
+            #TODO
+            "humansize": "?B",
+            "size": "?",
+            "slug": "example"
+        }
+
+"""
+"crumbs": [("index", "/"), ("some-document", None)]
+"""
+# relative route path
+def buildCrumbs(path):
+    crumbs = []
+    prepath = None
+    path, elt = os.path.split(path)
+    while elt != "":
+        crumbs.append((elt, prepath))
+        path, elt = os.path.split(path)
+        prepath = path
+    if elt == "":
+        crumbs.append(('home', prepath))
+    print crumbs
+    crumbs.reverse()
+    return crumbs
+
+
 
 @app.errorhandler(404)
 def page_not_found(e):

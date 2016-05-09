@@ -49,7 +49,7 @@
       
       {% block body_header %}
         {% block crumbs %}
-          {{ breadcrumbs.crumbs(crumbs) }}
+          {{ breadcrumbs.crumbs(crumbs)|safe }}
         {% endblock crumbs %}
       {% endblock body_header %}
       

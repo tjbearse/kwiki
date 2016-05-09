@@ -68,5 +68,15 @@ class NonMarkDownTests(unittest.TestCase):
         r = self.app.get('/stuff/wiki.jpg')
         self.assertEqual(r.data, '/start/stuff/wiki.jpg')
 
+class ListingTests(unittest.TestCase):
+    def setUp(self):
+        server.app.config['TESTING'] = True
+        server.app.config['root'] = '/start/'
+        setup_with_context_manager(self, monkey_patch(os.path, 'isfile', untrue))
+        self.app = server.app.test_client()
+
+    def tearDown(self):
+        pass
+
 if __name__ == '__main__':
     unittest.main()
