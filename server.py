@@ -6,7 +6,7 @@ import os
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
 
-app.config['wikiExt'] = ['.md', '.wiki']
+app.config['wikiExt'] = ['.md', '.wiki', '.txt']
 app.config['markdownSettings'] = {}
 app.config['root'] = os.getcwd()
 
@@ -22,23 +22,35 @@ def fileDispatch(path):
 
     fullpath = flask.safe_join(app.config['root'], path)
     type = getFileType(fullpath)
-    if(type == WIKI):
+    if type == WIKI:
         return markdownFile(fullpath, '/'+path)
-    elif(type == NON_WIKI):
+    elif type == NON_WIKI:
         return notMarkdown(fullpath)
-    else:
+    elif type == DIR:
+        # try index
         return listing(fullpath, '/'+path)
+    else:
+        # try w/o extension
+        file, ext = os.path.splitext(path)
+        if ext == '':
+            for ext in app.config['wikiExt']:
+                if os.path.exists(path + ext):
+                    return flask.redirect('/' + path + ext)
+        print path
+        flask.abort(404)
 
 # req full path
 def getFileType(path):
-    if(os.path.isfile(path)):
+    if os.path.isfile(path):
         file, ext = os.path.splitext(path)
         if(ext in app.config['wikiExt']):
             return WIKI
         else:
             return NON_WIKI
-    else:
+    elif os.path.exists(path):
         return DIR
+    else:
+        return None
 
 def notMarkdown(path):
     return flask.send_file(path)
@@ -145,7 +157,6 @@ def buildCrumbs(path):
         prepath = path
     if elt == "":
         crumbs.append(('home', prepath))
-    print crumbs
     crumbs.reverse()
     return crumbs
 
