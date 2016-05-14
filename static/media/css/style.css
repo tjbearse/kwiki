@@ -3,8 +3,9 @@ html {
 
 body {
   background-color: white;
-  margin: 0 auto;
-  width: 650px; }
+  margin: 0 0 0 300px;
+  width: 650px;
+  }
   body #breadcrumbs, body #content, body #footer {
     background-color: white;
     clear: both;
@@ -119,6 +120,17 @@ pre {
         border: none;
         margin: 0;
         padding: 0; }
+.toc {
+    display: inline-block;
+    background: #f6f6f6;
+    border-color: lightgray;
+    border-width: thin;
+    border-style: solid;
+    float: left;
+    padding: 8px;
+    margin-bottom: 8px;
+    margin-right: 16px;
+}
 
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, Geneva, sans-serif;
@@ -145,10 +157,13 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 21px; }
 
 h1 {
-  font-size: 21px; }
+  font-size: 21px;
+  clear: both;
+  }
 
 h2 {
-  font-size: 18px; }
+  font-size: 18px;
+  }
 
 h3 {
   font-size: 15px; }
@@ -175,3 +190,11 @@ pre {
   font-family: Menlo, 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', Courier, 'Courier 10 Pitch', 'Courier New', monospace;
   font-size: 11px;
   line-height: 18px; }
+
+
+.toc span.toctitle {
+    text-align: center;
+    display: block;
+    float: none;
+    text-decoration: underline;
+}

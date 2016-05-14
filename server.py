@@ -1,13 +1,12 @@
-from StringIO import StringIO
 import flask
 import markdown
+import markdownConv
 import os
 
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
 
-app.config['wikiExt'] = ['.md', '.wiki', '.txt']
-app.config['markdownSettings'] = {}
+app.config['wikiExt'] = ['.md', '.wiki', '.txt', '']
 app.config['root'] = os.getcwd()
 
 WIKI = 'wiki'
@@ -83,10 +82,8 @@ def notMarkdown(path):
 }
 """
 def markdownFile(wikipage, route):
-    istream = StringIO()
     try:
-        markdown.markdownFromFile(input=wikipage, output=istream, **app.config['markdownSettings'])
-        md = flask.Markup(istream.getvalue())
+        md = flask.Markup(markdownConv.markdown2html(wikipage))
         return flask.render_template('document.html',
                     content=md,
                     crumbs=buildCrumbs(route)
@@ -94,8 +91,6 @@ def markdownFile(wikipage, route):
     except Exception as e:
         print 'file failed', wikipage, e.args
         flask.abort(404)
-    finally:
-        istream.close()
 
 """
 {"directory": "somedir",
@@ -188,3 +183,4 @@ def page_not_found(e):
 
 if __name__ == '__main__':
     app.run()
+

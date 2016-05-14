@@ -39,7 +39,10 @@
         {{ html.cssimport(url_for("static", filename="media/css/pygments.css"))|safe }}
       {% endblock %}
       
-      {% block js %}{% endblock %}
+      {% block js %}
+        {{ html.jsimport(url_for("static", filename="media/js/jquery.js")) | safe}}
+        {{ html.jsimport(url_for("static", filename="media/js/script.js")) | safe}}
+      {% endblock %}
       
     {% endblock head %}
   </head>
