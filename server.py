@@ -168,8 +168,8 @@ def buildCrumbs(path):
     path, elt = os.path.split(path)
     while elt != "":
         crumbs.append((elt, prepath))
-        path, elt = os.path.split(path)
         prepath = path
+        path, elt = os.path.split(path)
     if elt == "":
         crumbs.append(('home', prepath))
     crumbs.reverse()
