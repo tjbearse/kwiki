@@ -1,12 +1,11 @@
 import flask
 import markdown
-import markdownConv
+import converter
 import os
 
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
 
-app.config['wikiExt'] = ['.md', '.wiki', '.txt', '']
 app.config['root'] = os.getcwd()
 
 WIKI = 'wiki'
@@ -53,14 +52,14 @@ def fileDispatch(path):
         # try w/o extension
         file, ext = os.path.splitext(path)
         if ext == '':
-            for ext in app.config['wikiExt']:
+            for ext in converter.getConvertableTypeExtensions():
                 if os.path.exists(fullpath + ext):
                     return flask.redirect(path + ext)
         print 'fileDispatch', path, fullpath
         flask.abort(404)
 
 def findIndex(fullpath, route):
-    for ext in app.config['wikiExt']:
+    for ext in converter.getConvertableTypeExtensions():
         ipath = flask.safe_join(fullpath, 'index' + ext)
         if os.path.exists(ipath):
             return flask.safe_join(route, 'index' + ext)
@@ -70,7 +69,7 @@ def findIndex(fullpath, route):
 def getFileType(path):
     if os.path.isfile(path):
         file, ext = os.path.splitext(path)
-        if(ext in app.config['wikiExt']):
+        if(ext in converter.getConvertableTypeExtensions()):
             return WIKI
         else:
             return NON_WIKI
@@ -82,42 +81,35 @@ def getFileType(path):
 def notMarkdown(path):
     return flask.send_file(path)
 
-def markdownFile(wikipage):
-    with open(wikipage, 'r') as f:
-        rawmd = f.read()
-        html = flask.Markup(markdownConv.markdown2html(rawmd))
-    return html, rawmd
-
 def processWikiRequest(fullpath, crumbs):
+    raw = None
+    if flask.request.method == 'POST':
+        raw = flask.request.form.get('raw')
+
     if flask.request.args.get('edit') is not None:
-        raw = None
-        if flask.request.method == 'POST':
-            raw = flask.request.form.get('raw')
-        if raw is not None:
-            html = flask.Markup(markdownConv.markdown2html(raw))
-        else:
-            html, raw = markdownFile(fullpath)
-        return flask.render_template('edit-document.html',
-                    content=html,
-                    crumbs=crumbs,
-                    raw=raw
-                )
+        template = 'edit-document.html'
     else:
         if flask.request.method == 'POST':
-            raw = flask.request.form.get('raw')
             if raw is not None:
                 print "writing {} with {}".format(fullpath, raw)
                 with open(fullpath, 'w') as f:
                     f.write(raw)
             else:
                 abort(400)
-            html = flask.Markup(markdownConv.markdown2html(raw))
-        else:
-            html, md = markdownFile(fullpath)
-        return flask.render_template('document.html',
-                    content=html,
-                    crumbs=crumbs
-                )
+        template = 'document.html'
+
+    if raw is not None:
+        type = converter.getType(fullpath)
+        html = flask.Markup(converter.convert(raw, type))
+    else:
+        html, raw = converter.convertFromFile(fullpath)
+        print 'html', html
+        html = flask.Markup(html)
+    return flask.render_template(template,
+                content=html,
+                crumbs=crumbs,
+                raw=raw
+            )
 
 """
 {"directory": "somedir",
@@ -138,7 +130,6 @@ def processWikiRequest(fullpath, crumbs):
  "sub_directories": [{"basename": "subdir", "href": "/subdir/"}]}
 """
 def listing(directory, route, crumbs):
-    print('directory', directory)
     try:
         pages = []
         files = []
