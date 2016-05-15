@@ -11,6 +11,7 @@
   
   {% import "macros/html" as html -%}
   {% import "macros/crumbs" as breadcrumbs with context -%}
+  {% import "macros/controls" as controls with context -%}
   
   <head>
     {% block head %}
@@ -46,22 +47,21 @@
   <body {% block body_attrs %}{% endblock %}>
     {% block body %}
       
-      <div>
-        {% block body_header %}
-          <div class="">
-            {% block crumbs %}
-              <div class="pull-left">
-              {{ breadcrumbs.crumbs(crumbs)|safe }}
+      <div class="wrapper round">
+          {% block body_header %}
+              <div class="">
+                {% block crumbs %}
+                  <div class="pull-left">
+                  {{ breadcrumbs.crumbs(crumbs)|safe }}
+                  </div>
+                {% endblock crumbs %}
+                <div class="controls pull-right">
+                  {% block controls %}
+                  {% endblock controls %}
+                </div>
+                <hr class="clear"/>
               </div>
-            {% endblock crumbs %}
-            <div class="controls pull-right">
-              {% block controls %}
-              {% endblock controls %}
-            </div>
-            <hr class="clear"/>
-          </div>
-        {% endblock body_header %}
-        
+          {% endblock body_header %}
         <div id="content" class="">
           {% block content_header %}
           {% endblock content_header %}

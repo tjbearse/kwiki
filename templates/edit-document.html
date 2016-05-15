@@ -4,6 +4,14 @@
 <p class="bg-warning text-warning center-block text-center round">editing... your changes may not be saved<p>
 {% endblock content_header %}
 
+{% block controls %}
+{{ controls.controls([
+		('folder-open', true, '_directory_'),
+		('trash', true, '?delete'),
+		('remove', true, '?')
+	]) | safe }}
+{% endblock controls %}
+
 {% block content %}
 <div>
 {{ content }}

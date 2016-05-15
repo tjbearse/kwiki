@@ -6,7 +6,7 @@ from markdown_checklist.extension import ChecklistExtension
 
 type2ext = {
         'md': ['.md', '.wiki', ''],
-        'none': ['.txt']
+        'none': ['.txt', '.html']
     }
 
 def getType(filename):
@@ -49,7 +49,7 @@ extensions=[
         ]
 
 def markdown2html(in_str):
-    return markdown.markdown(in_str, extensions=extensions)
+    return markdown.markdown(in_str, output_format='html5', extensions=extensions)
 
 def txt2html(in_str):
     return in_str.replace('\n', '<br/>')

@@ -1,5 +1,5 @@
 html {
-  background-color: #f6f6f6;
+  background: darkgrey;
   }
 
 body {
@@ -9,17 +9,16 @@ body {
   min-width: 650px;
   }
   body #content {
-    background-color: white;
     clear: both;
-    float: left;
     overflow: hidden;
     padding: 16px;
+    margin-top:;
     width: 100%;
     }
   body #footer {
     padding-top: 13px;
     text-align: right;
-    background: #f6f6f6;
+    background: transparent;
     clear: both;
     }
   body .clear {
@@ -125,7 +124,7 @@ body {
     body #breadcrumbs li .list-crumb {
       font-weight: normal; }
   body #footer {
-    color: #777;
+    /* color: #f6f6f6; */
     font-size: 13px;
     }
   body.listing table#pages td.size, body.listing table#subdirs td.size {
@@ -167,12 +166,14 @@ input[type=submit] {float: right;}
 
 .breadcrumb {
     margin-bottom: 0;
+    background-color: white;
 }
 
 div {}
 
 .controls {
     margin-top: 8px;
+    margin-right: 8px;
 }
 
 .toc ul {
@@ -186,7 +187,23 @@ div {}
 }
 
 .round {
-    border-radius: 10px;
+    border-radius: 4px;
     border-width: 0px;
     border-style: solid;
+}
+
+
+.wrapper {
+    background-color: white;
+    margin-top: 16px;
+}
+
+.controls * {
+    margin: 0 8px;
+}
+
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+    color: gainsboro;
 }

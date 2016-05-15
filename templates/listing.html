@@ -4,6 +4,14 @@
 
 {% block body_attrs %}class="listing"{% endblock %}
 
+{% block controls %}
+{{ controls.controls([
+		('folder-open', false, '_directory_'),
+		('pencil', false, '?edit'),
+		('plus-sign', true, '/newpage')
+	]) | safe }}
+{% endblock controls %}
+
 {% block content %}
   <h1>{{ directory|e }}/</h1>
 

@@ -1,7 +1,12 @@
 {% extends 'base.html' %}
 
+{% import "macros/controls" as controls with context -%}
+
 {% block controls %}
-<a href="_directory_" class="glyphicon glyphicon-folder-open"></a>
-<a href="?edit#edit-page-box" class="glyphicon glyphicon-pencil"></a>
+{{ controls.controls([
+		('folder-open', true, '_directory_'),
+		('pencil', true, '?edit'),
+		('plus-sign', true, '/newpage')
+	]) | safe }}
 {% endblock controls %}
 {% block content %}{{ content }}{% endblock %}
