@@ -5,8 +5,8 @@
 {% block controls %}
 {{ controls.controls([
 		('folder-open', true, './?directory'),
-		('pencil', true, '?edit'),
-		('plus-sign', true, '/newpage')
+		('file', true, '/newpage'),
+		('pencil', true, '?edit')
 	]) | safe }}
 {% endblock controls %}
 {% block content %}{{ content }}{% endblock %}

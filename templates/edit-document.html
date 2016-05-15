@@ -6,9 +6,9 @@
 
 {% block controls %}
 {{ controls.controls([
-		('folder-open', true, './?directory'),
+		('move', true, '?move'),
+		('trash text-danger', true, '?delete'),
 		('remove', true, '?'),
-		('trash', true, '?delete')
 	]) | safe }}
 {% endblock controls %}
 

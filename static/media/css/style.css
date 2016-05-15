@@ -9,6 +9,7 @@ body {
   min-width: 650px;
   }
   body #content {
+    word-break: break-word;
     clear: both;
     overflow: hidden;
     padding: 16px;
@@ -166,7 +167,7 @@ input[type=submit] {float: right;}
 
 .breadcrumb {
     margin-bottom: 0;
-    background-color: white;
+    background-color: transparent;
 }
 
 div {}
@@ -198,12 +199,12 @@ div {}
     margin-top: 16px;
 }
 
-.controls * {
-    margin: 0 8px;
-}
-
 a.disabled {
     pointer-events: none;
     cursor: default;
     color: gainsboro;
+}
+
+.big-round {
+    border-radius: 8px;
 }

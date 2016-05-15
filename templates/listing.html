@@ -6,9 +6,9 @@
 
 {% block controls %}
 {{ controls.controls([
-		('folder-open', false, '_directory_'),
-		('pencil', false, '?edit'),
-		('plus-sign', true, '/newpage')
+		('move', true, '?move'),
+		('file', true, '/newpage'),
+		('wrench', true, '?edit')
 	]) | safe }}
 {% endblock controls %}
 
@@ -55,7 +55,7 @@
         <td class="size">{{ file.humansize }}</td>
         <td class="name">
           <a href="{{ file.href|e }}">
-            <code>{{ file.basename|e }}</code>
+            {{ file.basename|e }}
           </a>
         </td>
       </tr>

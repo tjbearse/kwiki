@@ -191,6 +191,7 @@ def buildCrumbs(path):
 
 @app.errorhandler(404)
 def page_not_found(e):
+    print e
     return flask.render_template('404.html'), 404
 
 if __name__ == '__main__':
