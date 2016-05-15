@@ -2,12 +2,10 @@
 
 {% block content %}
 {{ content }}
-<form method="post" action="?">
-	<textarea name="raw">{{raw}}</textarea>
+<form method="post" name="editpage" action="?">
+	<textarea name="raw" id="edit-page-box">{{raw}}</textarea>
+	<a href="?">Cancel</a>
 	<input type="submit" value="Save" />
-	<input type="submit" formaction="?edit" value="Preview" />
-</form>
-<form method="get" action="?">
-	<input type="submit" value="Cancel" />
+	<input type="submit" id="preview-btn" formaction="?edit" value="Preview" />
 </form>
 {% endblock %}

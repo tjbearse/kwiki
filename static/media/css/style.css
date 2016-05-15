@@ -198,3 +198,15 @@ pre {
     float: none;
     text-decoration: underline;
 }
+
+textarea#edit-page-box {
+    width: 100%;
+    resize: none;
+    min-height: 100px;
+}
+
+form {
+    display: inline;
+}
+
+input[type=submit] {float: right;}
