@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
-{% block controls %} <a href="?edit" class="glyphicon glyphicon-pencil pull-right"></a>
+{% block controls %}
+<a href="_directory_" class="glyphicon glyphicon-folder-open"></a>
+<a href="?edit#edit-page-box" class="glyphicon glyphicon-pencil"></a>
 {% endblock controls %}
 {% block content %}{{ content }}{% endblock %}

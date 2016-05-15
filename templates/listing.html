@@ -5,7 +5,7 @@
 {% block body_attrs %}class="listing"{% endblock %}
 
 {% block content %}
-  <h1><code>ls /{{ directory|e }}</code></h1>
+  <h1>{{ directory|e }}/</h1>
 
   {% if sub_directories %}
   <h2>Directories</h2>

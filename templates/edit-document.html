@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content_header %}
+<p class="bg-warning text-warning center-block text-center round">editing... your changes may not be saved<p>
 {% endblock content_header %}
 
 {% block content %}
@@ -16,7 +17,7 @@
 	<div class="form-group">
 		<a href="?" class="btn btn-link">Cancel</a>
 
-		<button type="submit" id="preview-btn" formaction="?edit" class="btn btn-default">Preview</button>
+		<button type="submit" id="preview-btn" formaction="?edit#edit-page-box" class="btn btn-default">Preview</button>
 		<button type="submit" class="btn btn-primary pull-right">Save</button>
 	</div>
 </form>
