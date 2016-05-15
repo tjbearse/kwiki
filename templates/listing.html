@@ -6,10 +6,11 @@
 
 {% block controls %}
 {{ controls.controls([
-		('move', true, '?move'),
-		('file', true, '/newpage'),
-		('wrench', true, '?edit')
-	]) | safe }}
+    ('search', true, '/search'),
+    ('move', true, '?move'),
+    ('file', true, '/newpage'),
+    ('wrench', true, '?edit')
+  ]) | safe }}
 {% endblock controls %}
 
 {% block content %}
@@ -19,7 +20,7 @@
     {% for subdir in sub_directories %}
       <tr>
         <td class="name">
-          <span class="glyphicon glyphicon-folder-close"></span>
+          <span class="glyphicon glyphicon-folder-close text-primary"></span>
           <a class="dirlink" href="{{ subdir.href|e }}">
             {{ subdir.basename|e }}/
           </a>
@@ -31,7 +32,7 @@
     {% for page in pages %}
       <tr>
         <td class="name">
-          <span class="glyphicon glyphicon-file"></span>
+          <span class="glyphicon glyphicon-file text-primary"></span>
           <a href="{{ page.href|e }}" title="{{ page.title|e }}">
             {{ page.title|e }}
           </a>
@@ -43,7 +44,7 @@
     {% for file in files %}
       <tr>
         <td class="name">
-          <span class="glyphicon glyphicon-picture"></span>
+          <span class="glyphicon glyphicon-picture text-primary"></span>
           <a href="{{ file.href|e }}">
             {{ file.basename|e }}
           </a>

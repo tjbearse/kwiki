@@ -216,3 +216,16 @@ td.size, th.size {
 td.time, th.time {
     /* text-align: right; */
 }
+
+.search-bar {
+    margin-bottom: 8px;
+}
+
+ul.search-results {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+ul.search-results li {
+    margin-bottom: 8px;
+}

@@ -3,6 +3,7 @@ import os
 
 import converter
 import fileOps
+import searchEngine
 
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
@@ -117,6 +118,13 @@ def listing(directory, route, crumbs):
         print 'directory failed:', e
         flask.abort(404)
 
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    results = []
+    search = flask.request.form.get('q')
+    if search is not None:
+        results = searchEngine.search(search)
+    return flask.render_template('search.html', query=search, results=results)
 
 
 @app.errorhandler(404)
