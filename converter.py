@@ -9,7 +9,8 @@ from markdown_checklist.extension import ChecklistExtension
 
 type2ext = {
         'md': ['.md', '.wiki', ''],
-        'none': ['.txt', '.html']
+        'txt': ['.txt'],
+        'none': ['.html']
     }
 
 def getType(filename):
@@ -30,8 +31,10 @@ def getConvertableTypeExtensions():
 def convert(in_str, type):
     if type == 'md':
         return markdown2html(in_str)
-    elif type == 'none':
+    elif type == 'txt':
         return txt2html(in_str)
+    elif type == 'none':
+        return in_str
     else:
         raise 'no type'
 
