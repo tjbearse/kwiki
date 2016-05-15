@@ -29,11 +29,7 @@
       </title>
       
       {% block css %}
-        <!-- YUI CSS reset, fonts, base -->
-        {{ html.cssimport(("http://yui.yahooapis.com/combo?" +
-                           "3.0.0/build/cssreset/reset-min.css&" +
-                           "3.0.0/build/cssfonts/fonts-min.css&" +
-                           "3.0.0/build/cssbase/base-min.css") | e) |safe }}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
         
         {{ html.cssimport(url_for("static", filename="media/css/style.css"))|safe }}
         {{ html.cssimport(url_for("static", filename="media/css/pygments.css"))|safe }}
@@ -50,24 +46,35 @@
   <body {% block body_attrs %}{% endblock %}>
     {% block body %}
       
-      {% block body_header %}
-        {% block crumbs %}
-          {{ breadcrumbs.crumbs(crumbs)|safe }}
-        {% endblock crumbs %}
-      {% endblock body_header %}
-      
-      <div id="content">
-        {% block content_header %}
-        {% endblock content_header %}
+      <div>
+        {% block body_header %}
+          <div class="">
+            {% block crumbs %}
+              <div class="pull-left">
+              {{ breadcrumbs.crumbs(crumbs)|safe }}
+              </div>
+            {% endblock crumbs %}
+            <div class="controls pull-right">
+              {% block controls %}
+              {% endblock controls %}
+            </div>
+            <hr class="clear"/>
+          </div>
+        {% endblock body_header %}
         
-        {% block content %}
-        {% endblock content %}
-        
-        {% block content_footer %}
-        {% endblock content_footer %}
+        <div id="content" class="">
+          {% block content_header %}
+          {% endblock content_header %}
+          
+          {% block content %}
+          {% endblock content %}
+          
+          {% block content_footer %}
+          {% endblock content_footer %}
         
         <hr class="clear" />
       </div> <!-- div#content -->
+    </div>
       
       {% block body_footer %}
       <div id="footer">

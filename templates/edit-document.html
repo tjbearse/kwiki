@@ -1,11 +1,23 @@
 {% extends 'base.html' %}
 
+{% block content_header %}
+{% endblock content_header %}
+
 {% block content %}
+<div>
 {{ content }}
+</div>
+<hr/>
+<a href="?" class="close"><span aria-hidden="true">&times;</span></a>
 <form method="post" name="editpage" action="?">
-	<textarea name="raw" id="edit-page-box">{{raw}}</textarea>
-	<a href="?">Cancel</a>
-	<input type="submit" value="Save" />
-	<input type="submit" id="preview-btn" formaction="?edit" value="Preview" />
+	<div class="form-group">
+		<textarea name="raw" id="edit-page-box" class="form-control">{{raw}}</textarea>
+	</div>
+	<div class="form-group">
+		<a href="?" class="btn btn-link">Cancel</a>
+
+		<button type="submit" id="preview-btn" formaction="?edit" class="btn btn-default">Preview</button>
+		<button type="submit" class="btn btn-primary pull-right">Save</button>
+	</div>
 </form>
 {% endblock %}

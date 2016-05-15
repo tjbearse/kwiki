@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
 
-{% block content_header %} <a href="?edit">edit</a> {% endblock content_header %}
+{% block controls %} <a href="?edit" class="glyphicon glyphicon-pencil pull-right"></a>
+{% endblock controls %}
 {% block content %}{{ content }}{% endblock %}

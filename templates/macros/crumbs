@@ -1,8 +1,8 @@
 {% macro crumbs(breadcrumbs) %}
   {% if breadcrumbs %}
-    <ol id="breadcrumbs">
+    <ol class="breadcrumb">
       {% for name, href in breadcrumbs %}
-        <li class="crumb-{{ loop.index0 }} {% if loop.last %}last{% else %}not-last{% endif %}">
+        <li>
           {% if not href %}
             {{ name|e }}
           {% else %}
