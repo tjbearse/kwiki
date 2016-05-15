@@ -112,24 +112,6 @@ def processWikiRequest(fullpath, crumbs):
                 raw=raw
             )
 
-"""
-{"directory": "somedir",
- "crumbs": [("index", "/"),
-            ("somedir", "/somedir/"),
-            (jinja2.Markup('<span class="list-crumb">list</span>'), None)],
- "files": [{"basename": "example.css",
-            "href": "/example.css",
-            "humansize": "27B",
-            "size": 27,
-            "slug": "example"}],
- "pages": [{"basename": "hello.html",
-            "href": "/subdir/hello",
-            "humansize": "268B",
-            "size": 268,
-            "slug": "hello",
-            "title": u"Hello again."}],
- "sub_directories": [{"basename": "subdir", "href": "/subdir/"}]}
-"""
 def listing(directory, route, crumbs):
     try:
         pages = []
@@ -165,16 +147,19 @@ def getDirInfo(d, relRoute):
         }
 
 def getFileInfo(file, fullpath, relRoute):
+    size = os.stat(fullpath).st_size
+    for pre in ['B', 'KB', 'GB']:
+        if size < 1024:
+            size = str(size) + ' ' + pre
+            break
+        size /= 1024
     basename = os.path.basename(file)
     title, ext = os.path.splitext(basename)
     return {
             "title": title,
             "basename": basename,
             "href": flask.safe_join(relRoute, file),
-            #TODO
-            "humansize": "?B",
-            "size": "?",
-            "slug": "example"
+            "humansize": size
         }
 
 """
