@@ -1,17 +1,13 @@
 import flask
-import markdown
-import converter
 import os
-import datetime
+
+import converter
+import fileOps
 
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
 
 app.config['root'] = os.getcwd()
-
-WIKI = 'wiki'
-NON_WIKI = 'file'
-DIR = 'dir'
 
 @app.route('/wiki/', defaults={'path': './'}, methods=['GET', 'POST'])
 @app.route('/wiki/<path:path>', methods=['GET', 'POST'])
@@ -22,23 +18,23 @@ def fileDispatch(path):
 
     fullpath = flask.safe_join(app.config['root'], path)
     #path = '/' + path
-    type = getFileType(fullpath)
-    crumbs = buildCrumbs(path)
-    if type == WIKI:
+    type = fileOps.getFileType(fullpath)
+    crumbs = fileOps.buildCrumbs(path)
+    if type == fileOps.WIKI:
         return processWikiRequest(fullpath, crumbs)
 
 
-    elif type == NON_WIKI:
+    elif type == fileOps.NON_WIKI:
         if flask.request.method == 'POST':
             abort(500)
         return notMarkdown(fullpath)
 
-    elif type == DIR:
+    elif type == fileOps.DIR:
         if flask.request.method == 'POST':
             abort(500)
         # try index
         if flask.request.args.get('directory') is None:
-            index = findIndex(fullpath, path)
+            index = fileOps.findIndex(fullpath, path)
             if index:
                 return flask.redirect(
                         flask.url_for('fileDispatch', path=index)
@@ -60,26 +56,6 @@ def fileDispatch(path):
                         )
         print 'fileDispatch', path, fullpath
         flask.abort(404)
-
-def findIndex(fullpath, route):
-    for ext in converter.getConvertableTypeExtensions():
-        ipath = flask.safe_join(fullpath, 'index' + ext)
-        if os.path.exists(ipath):
-            return flask.safe_join(route, 'index' + ext)
-    return None
-
-# req full path
-def getFileType(path):
-    if os.path.isfile(path):
-        file, ext = os.path.splitext(path)
-        if(ext in converter.getConvertableTypeExtensions()):
-            return WIKI
-        else:
-            return NON_WIKI
-    elif os.path.exists(path):
-        return DIR
-    else:
-        return None
 
 def notMarkdown(path):
     return flask.send_file(path)
@@ -122,13 +98,13 @@ def listing(directory, route, crumbs):
             if f[0] == '.':
                 continue
             fullpath = flask.safe_join(directory, f)
-            ftype = getFileType(fullpath)
-            if ftype == WIKI:
-                pages.append(getFileInfo(f, fullpath, route))
-            elif ftype == NON_WIKI:
-                files.append(getFileInfo(f, fullpath, route))
+            ftype = fileOps.getFileType(fullpath)
+            if ftype == fileOps.WIKI:
+                pages.append(fileOps.getFileInfo(f, fullpath, route))
+            elif ftype == fileOps.NON_WIKI:
+                files.append(fileOps.getFileInfo(f, fullpath, route))
             else:
-                subdirs.append(getDirInfo(f, route))
+                subdirs.append(fileOps.getDirInfo(f, route))
 
         return flask.render_template('listing.html',
                 crumbs=crumbs,
@@ -140,59 +116,6 @@ def listing(directory, route, crumbs):
     except Exception as e:
         print 'directory failed:', e
         flask.abort(404)
-
-def getDirInfo(d, relRoute):
-    return {
-            "basename": d,
-            "href": flask.safe_join(relRoute, d)
-        }
-
-def getFileInfo(file, fullpath, relRoute):
-    stat = os.stat(fullpath)
-    size = stat.st_size
-    time = stat.st_mtime
-    # human readable date
-    for pre in ['B', 'KB', 'GB']:
-        if size < 1024:
-            size = str(size) + ' ' + pre
-            break
-        size /= 1024
-    # human readable time
-    time = datetime.datetime.utcfromtimestamp(time)
-    basename = os.path.basename(file)
-    title, ext = os.path.splitext(basename)
-    return {
-            "title": title,
-            "basename": basename,
-            "href": flask.safe_join(relRoute, file),
-            "humansize": size,
-            "humantime": time
-        }
-
-"""
-"crumbs": [("index", "/"), ("some-document", None)]
-"""
-def makeLink(wikipath):
-    if wikipath is not None:
-        url =flask.safe_join('/wiki', wikipath)
-    else:
-        url = None
-    return url
-# relative route path
-def buildCrumbs(path):
-    crumbs = []
-    prepath = None
-    path, elt = os.path.split(path)
-    while elt != "":
-        url = makeLink(prepath)
-        crumbs.append((elt, url))
-        prepath = path
-        path, elt = os.path.split(path)
-    if elt == "":
-        url = makeLink(prepath)
-        crumbs.append(('home', url))
-    crumbs.reverse()
-    return crumbs
 
 
 
