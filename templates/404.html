@@ -2,6 +2,14 @@
 
 {% block title %}Not Found: {{ request.path_info|e }}{% endblock %}
 
+{% block controls %}
+{{ controls.controls([
+		('folder-open', true, '_directory_'),
+		('pencil', true, '?edit'),
+		('plus-sign', true, '/newpage')
+	]) | safe }}
+{% endblock controls %}
+
 {% block content %}
 <h1>Not Found: <code>{{ request.path_info|e }}</code></h1>
 <p>

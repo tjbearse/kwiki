@@ -1,0 +1,5 @@
+{% macro controls(controls) %}
+	{% for control in controls %}
+		<a href="{{ control[2] }}" class="glyphicon glyphicon-{{ control[0] }} {% if not control[1] %} disabled {% endif %}"></a>
+	{% endfor %}
+{% endmacro %}

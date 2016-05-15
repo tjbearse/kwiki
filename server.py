@@ -12,17 +12,18 @@ WIKI = 'wiki'
 NON_WIKI = 'file'
 DIR = 'dir'
 
-@app.route('/', defaults={'path': './'}, methods=['GET', 'POST'])
-@app.route('/<path:path>', methods=['GET', 'POST'])
+@app.route('/wiki/', defaults={'path': './'}, methods=['GET', 'POST'])
+@app.route('/wiki/<path:path>', methods=['GET', 'POST'])
 def fileDispatch(path):
     if '..' in path:
         print '.. in path'
         abort(404)
 
     fullpath = flask.safe_join(app.config['root'], path)
-    path = '/' + path
+    #path = '/' + path
     type = getFileType(fullpath)
     crumbs = buildCrumbs(path)
+    print 'path', path
     if type == WIKI:
         return processWikiRequest(fullpath, crumbs)
 
@@ -38,7 +39,9 @@ def fileDispatch(path):
         # try index
         index = findIndex(fullpath, path)
         if index:
-            return flask.redirect(index)
+            return flask.redirect(
+                    flask.url_for('fileDispatch', path=index)
+                )
         return listing(fullpath, path, crumbs)
 
     else:
@@ -54,11 +57,14 @@ def fileDispatch(path):
         if ext == '':
             for ext in converter.getConvertableTypeExtensions():
                 if os.path.exists(fullpath + ext):
-                    return flask.redirect(path + ext)
+                    return flask.redirect(
+                            flask.url_for('fileDispatch', path=path + ext)
+                        )
         print 'fileDispatch', path, fullpath
         flask.abort(404)
 
 def findIndex(fullpath, route):
+    print 'index', fullpath, route
     for ext in converter.getConvertableTypeExtensions():
         ipath = flask.safe_join(fullpath, 'index' + ext)
         if os.path.exists(ipath):
@@ -179,17 +185,27 @@ def getFileInfo(file, fullpath, relRoute):
 """
 "crumbs": [("index", "/"), ("some-document", None)]
 """
+def makeLink(wikipath):
+    if wikipath is not None:
+        print 'prepath', wikipath
+        url =flask.safe_join('/wiki', wikipath)
+        print 'url', url
+    else:
+        url = None
+    return url
 # relative route path
 def buildCrumbs(path):
     crumbs = []
     prepath = None
     path, elt = os.path.split(path)
     while elt != "":
-        crumbs.append((elt, prepath))
+        url = makeLink(prepath)
+        crumbs.append((elt, url))
         prepath = path
         path, elt = os.path.split(path)
     if elt == "":
-        crumbs.append(('home', prepath))
+        url = makeLink(prepath)
+        crumbs.append(('home', url))
     crumbs.reverse()
     return crumbs
 

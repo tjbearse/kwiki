@@ -1,8 +1,11 @@
 from StringIO import StringIO
 import markdown
 import markdown.extensions.toc
+import markdown.extensions.nl2br
 import os
 from markdown_checklist.extension import ChecklistExtension
+#from markdown_newtab import NewTabExtension
+# new tab is great but overzealous on internal links
 
 type2ext = {
         'md': ['.md', '.wiki', ''],
@@ -45,7 +48,9 @@ def convertFromFile(file):
 
 extensions=[
         markdown.extensions.toc.TocExtension(title='Table of Contents'),
-        ChecklistExtension()
+        ChecklistExtension(),
+        markdown.extensions.nl2br.Nl2BrExtension()
+        #NewTabExtension()
         ]
 
 def markdown2html(in_str):
