@@ -1,16 +1,24 @@
+import commands
+import flask
+import os
 
-
+import converter
 
 def search(in_str):
-    return [{
-        'filename': 'testy mctestypants',
-        'path': 'path/',
-        'link': '/wiki/path/testy_mctestypants',
-        'matchtext': 'this stuff is the stuff we matched on it can be very long an maybe wrap around stuff and mess stuff up'
-    },
-    {
-        'filename': 'testy mctestypants',
-        'path': 'path/',
-        'link': '/wiki/path/testy_mctestypants',
-        'matchtext': 'this stuff is the stuff we matched on it can be very long an maybe wrap around stuff and mess stuff up'
-    }]
+    escaped = in_str.translate({'"': r'\"'})
+    out = commands.getoutput('Ag -ila "{}"'.format(escaped)).splitlines()
+    out.reverse()
+    ret = [{
+            'filename': os.path.basename(name),
+            'path': os.path.split(name)[0],
+            'link': flask.safe_join('/wiki/', name),
+            'matchtext': flask.Markup(
+                    converter.txt2html(
+                        commands.getoutput(
+                            'Ag -iC --nofilename "{}" {}'.format(in_str, name)
+                        )
+                    )
+                )
+        } for name in out]
+    print 'ret', ret
+    return ret

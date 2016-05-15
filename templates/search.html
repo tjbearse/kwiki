@@ -28,7 +28,7 @@
 		{% for result in results %}
 			<li>
 				<a href="{{ result['link'] }}">
-					{{ result['path'] }}<b>{{ result['filename'] }}</b>
+					{{ result['path'] }}{% if result['path'] %}/{% endif %}<b>{{ result['filename'] }}</b>
 				</a>
 				<span> {{ result['matchtext'] }} </span>
 			</li>
