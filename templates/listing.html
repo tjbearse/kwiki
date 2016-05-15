@@ -13,53 +13,44 @@
 {% endblock controls %}
 
 {% block content %}
-  {% if sub_directories %}
-  <h2>Directories</h2>
-
-  <table id="subdirs">
+  <table class="dir-contents table table-hover">
+    <caption>Contents of dir</caption>
+    <tr><th>Name</th><th class="size">Size</th><th class="time">Last Modified</th></tr>
     {% for subdir in sub_directories %}
       <tr>
         <td class="name">
+          <span class="glyphicon glyphicon-folder-close"></span>
           <a class="dirlink" href="{{ subdir.href|e }}">
             {{ subdir.basename|e }}/
           </a>
         </td>
+        <td class="size">-</td>
+        <td class="time">-</td>
       </tr>
     {% endfor %}
-  </table>
-  {% endif %}
-
-  {% if pages %}
-  <h2>Pages</h2>
-
-  <table id="pages">
     {% for page in pages %}
       <tr>
-        <td class="size">{{ page.humansize }}</td>
         <td class="name">
+          <span class="glyphicon glyphicon-file"></span>
           <a href="{{ page.href|e }}" title="{{ page.title|e }}">
             {{ page.title|e }}
           </a>
         </td>
+        <td class="size">{{ page.humansize }}</td>
+        <td class="time">{{ page.humantime }}</td>
       </tr>
     {% endfor %}
-  </table>
-  {% endif %}
-
-  {% if files %}
-  <h2>Files</h2>
-
-  <table id="files">
     {% for file in files %}
       <tr>
-        <td class="size">{{ file.humansize }}</td>
         <td class="name">
+          <span class="glyphicon glyphicon-picture"></span>
           <a href="{{ file.href|e }}">
             {{ file.basename|e }}
           </a>
         </td>
+        <td class="size">{{ file.humansize }}</td>
+        <td class="time">{{ file.humantime }}</td>
       </tr>
     {% endfor %}
   </table>
-  {% endif %}
 {% endblock %}

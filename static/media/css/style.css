@@ -208,3 +208,11 @@ a.disabled {
 .big-round {
     border-radius: 8px;
 }
+
+td.size, th.size {
+    /* text-align: center; */
+}
+
+td.time, th.time {
+    /* text-align: right; */
+}

@@ -2,6 +2,7 @@ import flask
 import markdown
 import converter
 import os
+import datetime
 
 app = flask.Flask(__name__)
 app.config['DEBUG'] = True
@@ -147,19 +148,25 @@ def getDirInfo(d, relRoute):
         }
 
 def getFileInfo(file, fullpath, relRoute):
-    size = os.stat(fullpath).st_size
+    stat = os.stat(fullpath)
+    size = stat.st_size
+    time = stat.st_mtime
+    # human readable date
     for pre in ['B', 'KB', 'GB']:
         if size < 1024:
             size = str(size) + ' ' + pre
             break
         size /= 1024
+    # human readable time
+    time = datetime.datetime.utcfromtimestamp(time)
     basename = os.path.basename(file)
     title, ext = os.path.splitext(basename)
     return {
             "title": title,
             "basename": basename,
             "href": flask.safe_join(relRoute, file),
-            "humansize": size
+            "humansize": size,
+            "humantime": time
         }
 
 """
