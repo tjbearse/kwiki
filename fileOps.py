@@ -29,9 +29,10 @@ def getFileType(path):
         return None
 
 def getDirInfo(d, relRoute):
+    path = flask.safe_join(relRoute, d)
     return {
             "basename": d,
-            "href": flask.safe_join(relRoute, d)
+            "href": flask.url_for('fileDispatch', path=path)
         }
 
 def getFileInfo(file, fullpath, relRoute):
