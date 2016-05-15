@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block content_header %}
-<p class="bg-warning text-warning center-block text-center round">editing... your changes may not be saved<p>
+<p class="bg-warning text-warning center-block text-center round">Editing... your changes may not be saved<p>
 {% endblock content_header %}
 
 {% block controls %}
 {{ controls.controls([
 		('folder-open', true, '_directory_'),
-		('trash', true, '?delete'),
-		('remove', true, '?')
+		('remove', true, '?'),
+		('trash', true, '?delete')
 	]) | safe }}
 {% endblock controls %}
 
@@ -17,16 +17,21 @@
 {{ content }}
 </div>
 <hr/>
-<a href="?" class="close"><span aria-hidden="true">&times;</span></a>
 <form method="post" name="editpage" action="?">
 	<div class="form-group">
-		<textarea name="raw" id="edit-page-box" class="form-control">{{raw}}</textarea>
+		<a href="?" class="btn btn-danger">
+			<span class="glyphicon glyphicon-remove"></span>
+		</a>
+
+		<button type="submit" class="btn btn-primary pull-right">
+			<span class="glyphicon glyphicon-ok"></span>
+		</button>
+		<button type="submit" id="preview-btn" formaction="?edit#edit-page-box" class="btn btn-default pull-right" style="margin-right: 8px">
+			<span class="glyphicon glyphicon-refresh"></span>
+		</button>
 	</div>
 	<div class="form-group">
-		<a href="?" class="btn btn-link">Cancel</a>
-
-		<button type="submit" id="preview-btn" formaction="?edit#edit-page-box" class="btn btn-default">Preview</button>
-		<button type="submit" class="btn btn-primary pull-right">Save</button>
+		<textarea name="raw" id="edit-page-box" class="form-control">{{raw}}</textarea>
 	</div>
 </form>
 {% endblock %}
