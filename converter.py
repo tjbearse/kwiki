@@ -16,7 +16,6 @@ def getType(filename):
     file, ext = os.path.splitext(filename)
     for type, extensions in type2ext.iteritems():
         if ext in extensions:
-            print 'returning type', type
             return type
     return None
 
@@ -38,7 +37,6 @@ def convert(in_str, type):
 
 def convertFromFile(file):
     type = getType(file)
-    print 'type', type
     with open(file, 'r') as f:
         raw = f.read()
         html = convert(raw, type)

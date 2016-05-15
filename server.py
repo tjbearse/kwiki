@@ -23,7 +23,6 @@ def fileDispatch(path):
     #path = '/' + path
     type = getFileType(fullpath)
     crumbs = buildCrumbs(path)
-    print 'path', path
     if type == WIKI:
         return processWikiRequest(fullpath, crumbs)
 
@@ -37,11 +36,12 @@ def fileDispatch(path):
         if flask.request.method == 'POST':
             abort(500)
         # try index
-        index = findIndex(fullpath, path)
-        if index:
-            return flask.redirect(
-                    flask.url_for('fileDispatch', path=index)
-                )
+        if flask.request.args.get('directory') is None:
+            index = findIndex(fullpath, path)
+            if index:
+                return flask.redirect(
+                        flask.url_for('fileDispatch', path=index)
+                    )
         return listing(fullpath, path, crumbs)
 
     else:
@@ -49,9 +49,6 @@ def fileDispatch(path):
             abort(500)
         # list override?
         context, file = os.path.split(fullpath)
-        if file == '_directory_':
-            route, dir = os.path.split(path)
-            return listing(context, route, crumbs)
         # try w/o extension
         file, ext = os.path.splitext(path)
         if ext == '':
@@ -64,7 +61,6 @@ def fileDispatch(path):
         flask.abort(404)
 
 def findIndex(fullpath, route):
-    print 'index', fullpath, route
     for ext in converter.getConvertableTypeExtensions():
         ipath = flask.safe_join(fullpath, 'index' + ext)
         if os.path.exists(ipath):
@@ -109,7 +105,6 @@ def processWikiRequest(fullpath, crumbs):
         html = flask.Markup(converter.convert(raw, type))
     else:
         html, raw = converter.convertFromFile(fullpath)
-        print 'html', html
         html = flask.Markup(html)
     return flask.render_template(template,
                 content=html,
@@ -187,9 +182,7 @@ def getFileInfo(file, fullpath, relRoute):
 """
 def makeLink(wikipath):
     if wikipath is not None:
-        print 'prepath', wikipath
         url =flask.safe_join('/wiki', wikipath)
-        print 'url', url
     else:
         url = None
     return url
