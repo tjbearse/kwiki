@@ -91,32 +91,28 @@ def processWikiRequest(fullpath, crumbs):
             )
 
 def listing(directory, route, crumbs):
-    try:
-        pages = []
-        files = []
-        subdirs = []
-        for f in os.listdir(directory):
-            if f[0] == '.':
-                continue
-            fullpath = flask.safe_join(directory, f)
-            ftype = fileOps.getFileType(fullpath)
-            if ftype == fileOps.WIKI:
-                pages.append(fileOps.getFileInfo(f, fullpath, route))
-            elif ftype == fileOps.NON_WIKI:
-                files.append(fileOps.getFileInfo(f, fullpath, route))
-            else:
-                subdirs.append(fileOps.getDirInfo(f, route))
+    pages = []
+    files = []
+    subdirs = []
+    for f in os.listdir(directory):
+        if f[0] == '.':
+            continue
+        fullpath = flask.safe_join(directory, f)
+        ftype = fileOps.getFileType(fullpath)
+        if ftype == fileOps.WIKI:
+            pages.append(fileOps.getFileInfo(f, fullpath, route))
+        elif ftype == fileOps.NON_WIKI:
+            files.append(fileOps.getFileInfo(f, fullpath, route))
+        else:
+            subdirs.append(fileOps.getDirInfo(f, route))
 
-        return flask.render_template('listing.html',
-                crumbs=crumbs,
-                directory=os.path.basename(directory),
-                files=files,
-                pages=pages,
-                sub_directories=subdirs
-                )
-    except Exception as e:
-        print 'directory failed:', e
-        flask.abort(404)
+    return flask.render_template('listing.html',
+            crumbs=crumbs,
+            directory=os.path.basename(directory),
+            files=files,
+            pages=pages,
+            sub_directories=subdirs
+            )
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():

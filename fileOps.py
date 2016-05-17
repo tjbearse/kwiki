@@ -52,14 +52,14 @@ def getFileInfo(file, fullpath, relRoute):
     return {
             "title": title,
             "basename": basename,
-            "href": flask.safe_join(relRoute, file),
+            "href": flask.url_for('fileDispatch', path=flask.safe_join(relRoute, file)),
             "humansize": size,
             "humantime": time
         }
 
 def makeLink(wikipath):
     if wikipath is not None:
-        url =flask.safe_join('/wiki', wikipath)
+        url =flask.url_for('fileDispatch', path=wikipath)
     else:
         url = None
     return url

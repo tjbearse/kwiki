@@ -24,7 +24,9 @@ def getConvertableTypeExtensions():
     def flatten(accum, x):
         accum.extend(x)
         return accum
-    return reduce(flatten, type2ext.values(), [])
+    r = reduce(flatten, type2ext.values(), [])
+    print 'file types', r
+    return r
 
 
 
