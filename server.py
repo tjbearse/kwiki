@@ -9,7 +9,14 @@ import urlconverters
 app = flask.Flask(__name__)
 
 app.url_map.converters['dir'] = urlconverters.DirectoryConverter
-app.url_map.converters['file'] = urlconverters.FileConverter
+app.url_map.converters['wiki'] = urlconverters.getFileConverter(
+        includeByDefault = False,
+        exceptions = converter.getConvertableTypeExtensions()
+    )
+app.url_map.converters['file'] = urlconverters.getFileConverter(
+        includeByDefault = True,
+        exceptions = converter.getConvertableTypeExtensions()
+    )
 
 app.config['DEBUG'] = True
 
@@ -17,6 +24,7 @@ app.config['root'] = os.getcwd()
 
 @app.route('/wiki/<dir:path>', methods=['GET', 'POST'])
 @app.route('/wiki/<file:path>', methods=['GET', 'POST'])
+@app.route('/wiki/<wiki:path>', methods=['GET', 'POST'])
 @app.route('/wiki/', defaults={'path': ''}, methods=['GET', 'POST'])
 def fileDispatch(path):
     if '..' in path:

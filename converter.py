@@ -8,7 +8,7 @@ from markdown_checklist.extension import ChecklistExtension
 # new tab is great but overzealous on internal links
 
 type2ext = {
-        'md': ['.md', '.wiki', ''],
+        'md': ['.md', '.wiki'],
         'txt': ['.txt'],
         'none': ['.html']
     }
