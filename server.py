@@ -10,7 +10,7 @@ app.config['DEBUG'] = True
 
 app.config['root'] = os.getcwd()
 
-@app.route('/wiki/', defaults={'path': './'}, methods=['GET', 'POST'])
+@app.route('/wiki/', defaults={'path': ''}, methods=['GET', 'POST'])
 @app.route('/wiki/<path:path>', methods=['GET', 'POST'])
 def fileDispatch(path):
     if '..' in path:
@@ -18,7 +18,6 @@ def fileDispatch(path):
         abort(404)
 
     fullpath = flask.safe_join(app.config['root'], path)
-    #path = '/' + path
     type = fileOps.getFileType(fullpath)
     crumbs = fileOps.buildCrumbs(path)
     if type == fileOps.WIKI:
@@ -31,6 +30,8 @@ def fileDispatch(path):
         return notMarkdown(fullpath)
 
     elif type == fileOps.DIR:
+        if path != '' and path[-1] != '/':
+            return flask.redirect(flask.url_for('fileDispatch', path=path+'/'))
         if flask.request.method == 'POST':
             abort(500)
         # try index

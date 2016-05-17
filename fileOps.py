@@ -68,7 +68,9 @@ def buildCrumbs(path):
     crumbs = []
     prepath = None
     path, elt = os.path.split(path)
-    while elt != "":
+    if elt == "":
+        path, elt = os.path.split(path)
+    while elt != '':
         url = makeLink(prepath)
         crumbs.append((elt, url))
         prepath = path

@@ -1,7 +1,5 @@
 {% extends 'base.html' %}
 
-{% import "macros/controls" as controls with context -%}
-
 {% block controls %}
 {{ controls.controls([
 		('search', true, '/search'),
@@ -24,14 +22,16 @@
 	</form>
 {% endblock content_header %}
 {% block content %}
-	<ul class="search-results">
-		{% for result in results %}
-			<li>
-				<a href="{{ result['link'] }}">
-					{{ result['path'] }}{% if result['path'] %}/{% endif %}<b>{{ result['filename'] }}</b>
-				</a>
-				<span> {{ result['matchtext'] }} </span>
-			</li>
-		{% endfor %}
-	<ul>
+	{% if results %}
+		<ul class="search-results">
+			{% for result in results %}
+				<li>
+					<a href="{{ result['link'] }}">
+						{{ result['path'] }}{% if result['path'] %}/{% endif %}<b>{{ result['filename'] }}</b>
+					</a>
+					<span> {{ result['matchtext'] }} </span>
+				</li>
+			{% endfor %}
+		<ul>
+	{% endif %}
 {% endblock %}
