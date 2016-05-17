@@ -1,9 +1,11 @@
 from StringIO import StringIO
+import codecs
 import markdown
-import markdown.extensions.toc
-import markdown.extensions.nl2br
 import os
+
 from markdown_checklist.extension import ChecklistExtension
+from markdown.extensions.nl2br import Nl2BrExtension
+from markdown.extensions.toc import TocExtension
 #from markdown_newtab import NewTabExtension
 # new tab is great but overzealous on internal links
 
@@ -41,7 +43,7 @@ def convert(in_str, type):
 
 def convertFromFile(file):
     type = getType(file)
-    with open(file, 'r') as f:
+    with codecs.open(file, 'r', encoding='utf-8') as f:
         raw = f.read()
         html = convert(raw, type)
     return html, raw
@@ -49,9 +51,9 @@ def convertFromFile(file):
 
 
 extensions=[
-        markdown.extensions.toc.TocExtension(title='Table of Contents'),
+        TocExtension(title='Table of Contents'),
         ChecklistExtension(),
-        markdown.extensions.nl2br.Nl2BrExtension()
+        Nl2BrExtension()
         #NewTabExtension()
         ]
 
