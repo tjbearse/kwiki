@@ -4,14 +4,20 @@ import os
 import converter
 import fileOps
 import searchEngine
+import urlconverters
 
 app = flask.Flask(__name__)
+
+app.url_map.converters['dir'] = urlconverters.DirectoryConverter
+app.url_map.converters['file'] = urlconverters.FileConverter
+
 app.config['DEBUG'] = True
 
 app.config['root'] = os.getcwd()
 
+@app.route('/wiki/<dir:path>', methods=['GET', 'POST'])
+@app.route('/wiki/<file:path>', methods=['GET', 'POST'])
 @app.route('/wiki/', defaults={'path': ''}, methods=['GET', 'POST'])
-@app.route('/wiki/<path:path>', methods=['GET', 'POST'])
 def fileDispatch(path):
     if '..' in path:
         print '.. in path'
