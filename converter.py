@@ -1,4 +1,3 @@
-from StringIO import StringIO
 import codecs
 import markdown
 import os
@@ -53,7 +52,8 @@ def convertFromFile(file):
 extensions=[
         TocExtension(title='Table of Contents'),
         ChecklistExtension(),
-        Nl2BrExtension()
+        Nl2BrExtension(),
+        'markdown.extensions.tables'
         #NewTabExtension()
         ]
 

@@ -1,5 +1,6 @@
 import flask
 import os
+import sys
 
 import converter
 import fileOps
@@ -20,7 +21,10 @@ app.url_map.converters['file'] = urlconverters.getFileConverter(
 
 app.config['DEBUG'] = True
 
-app.config['root'] = os.getcwd()
+if len(sys.argv) > 1:
+    app.config['root'] = sys.argv[1]
+else:
+    app.config['root'] = os.getcwd()
 
 @app.route('/wiki/<dir:path>', methods=['GET', 'POST'])
 @app.route('/wiki/<file:path>', methods=['GET', 'POST'])
@@ -144,5 +148,5 @@ def page_not_found(e):
     return flask.render_template('404.html'), 404
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
 
