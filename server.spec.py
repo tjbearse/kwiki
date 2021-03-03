@@ -44,7 +44,7 @@ class MarkDownTests(unittest.TestCase):
         md = 'this is the markdown'
         with monkey_patch(markdown, 'markdownFromFile', lambda **k: k['output'].write(md)):
             r = self.app.get('/wiki.md')
-            print 'r', r.get_data()
+            print('r', r.get_data())
             self.assertEqual(r.data, flask.Markup(md))
 
     def test_usesFullPath(self):

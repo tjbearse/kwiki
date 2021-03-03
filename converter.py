@@ -5,6 +5,7 @@ import os
 from markdown_checklist.extension import ChecklistExtension
 from markdown.extensions.nl2br import Nl2BrExtension
 from markdown.extensions.toc import TocExtension
+from functools import reduce
 #from markdown_newtab import NewTabExtension
 # new tab is great but overzealous on internal links
 
@@ -16,7 +17,7 @@ type2ext = {
 
 def getType(filename):
     file, ext = os.path.splitext(filename)
-    for type, extensions in type2ext.iteritems():
+    for type, extensions in type2ext.items():
         if ext in extensions:
             return type
     return None
@@ -25,7 +26,7 @@ def getConvertableTypeExtensions():
     def flatten(accum, x):
         accum.extend(x)
         return accum
-    r = reduce(flatten, type2ext.values(), [])
+    r = reduce(flatten, list(type2ext.values()), [])
     return r
 
 

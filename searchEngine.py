@@ -1,4 +1,4 @@
-import commands
+import subprocess
 import flask
 import os
 
@@ -6,7 +6,7 @@ import converter
 
 def search(in_str):
     escaped = in_str.translate({'"': r'\"'})
-    out = commands.getoutput('Ag -ila "{}"'.format(escaped)).splitlines()
+    out = subprocess.getoutput('Ag -ila "{}"'.format(escaped)).splitlines()
     out.reverse()
     ret = [{
             'filename': os.path.basename(name),
@@ -14,11 +14,11 @@ def search(in_str):
             'link': flask.safe_join('/wiki/', name),
             'matchtext': flask.Markup(
                     converter.txt2html(
-                        commands.getoutput(
+                        subprocess.getoutput(
                             'Ag -iC --nofilename "{}" {}'.format(in_str, name)
                         )
                     )
                 )
         } for name in out]
-    print 'ret', ret
+    print('ret', ret)
     return ret

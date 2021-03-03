@@ -32,7 +32,7 @@ else:
 @app.route('/wiki/', defaults={'path': ''}, methods=['GET', 'POST'])
 def fileDispatch(path):
     if '..' in path:
-        print '.. in path'
+        print('.. in path')
         abort(404)
 
     fullpath = flask.safe_join(app.config['root'], path)
@@ -74,7 +74,7 @@ def fileDispatch(path):
                     return flask.redirect(
                             flask.url_for('fileDispatch', path=path + ext)
                         )
-        print 'fileDispatch', path, fullpath
+        print('fileDispatch', path, fullpath)
         flask.abort(404)
 
 def notMarkdown(path):
@@ -90,7 +90,7 @@ def processWikiRequest(fullpath, crumbs):
     else:
         if flask.request.method == 'POST':
             if raw is not None:
-                print "writing {} with {}".format(fullpath, raw)
+                print("writing {} with {}".format(fullpath, raw))
                 with open(fullpath, 'w') as f:
                     f.write(raw)
             else:
@@ -144,7 +144,7 @@ def search():
 
 @app.errorhandler(404)
 def page_not_found(e):
-    print e
+    print(e)
     return flask.render_template('404.html'), 404
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-from python:2.7-alpine3.7
+from python:3-alpine
 workdir /home
 RUN apk --no-cache add curl
 copy . .
