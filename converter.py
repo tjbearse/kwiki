@@ -1,4 +1,6 @@
 import codecs
+import flask
+import jinja2
 import markdown
 import os
 
@@ -59,6 +61,12 @@ extensions=[
         ]
 
 def markdown2html(in_str):
+    # preprocess templating in the markdown text first
+    try:
+        in_str = flask.render_template_string(in_str)
+    except jinja2.exceptions.TemplateSyntaxError as error:
+        return '!!! error in jinja template: {}'.format(error)
+
     return markdown.markdown(in_str, output_format='html5', extensions=extensions)
 
 def txt2html(in_str):

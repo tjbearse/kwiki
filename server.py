@@ -20,6 +20,7 @@ app.url_map.converters['file'] = urlconverters.getFileConverter(
     )
 
 app.config['DEBUG'] = True
+app.jinja_options = {'extensions': ['jinja2.ext.do', 'jinja2.ext.with_']}
 
 if len(sys.argv) > 1:
     app.config['root'] = sys.argv[1]
