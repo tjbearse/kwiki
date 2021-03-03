@@ -13,7 +13,7 @@ from functools import reduce
 
 type2ext = {
         'md': ['.md', '.wiki'],
-        'txt': ['.txt'],
+        'txt': ['.txt', '.org'],
         'none': ['.html']
     }
 
