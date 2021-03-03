@@ -27,6 +27,10 @@ if len(sys.argv) > 1:
 else:
     app.config['root'] = os.getcwd()
 
+@app.route('/', methods=['GET'])
+def root():
+    return flask.redirect(flask.url_for('fileDispatch', path=''))
+
 @app.route('/wiki/<dir:path>', methods=['GET', 'POST'])
 @app.route('/wiki/<file:path>', methods=['GET', 'POST'])
 @app.route('/wiki/<wiki:path>', methods=['GET', 'POST'])
