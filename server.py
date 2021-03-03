@@ -143,7 +143,8 @@ def search():
     results = []
     search = flask.request.form.get('q')
     if search is not None:
-        results = searchEngine.search(search)
+        path = flask.safe_join(app.config['root'], '')
+        results = searchEngine.search(search, path)
     return flask.render_template('search.html', query=search, results=results)
 
 
