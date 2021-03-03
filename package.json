@@ -1,0 +1,21 @@
+{
+  "name": "kwiki",
+  "version": "1.0.0",
+  "description": "Start in a repo that has markdown e.g. `cd markdown/; python server.py`",
+  "main": "index.js",
+  "scripts": {
+    "static": "copyStatic.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjbearse/kwiki.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tjbearse/kwiki/issues"
+  },
+  "homepage": "https://github.com/tjbearse/kwiki#readme",
+  "devDependencies": {
+    "bootstrap": "^3.4.1",
+    "jquery": "^3.6.0"
+  }
+}

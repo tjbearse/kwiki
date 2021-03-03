@@ -30,14 +30,15 @@
       </title>
       
       {% block css %}
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+        {{ html.cssimport(url_for("static", filename="media/css/bootstrap.min.css"))|safe }}
         
         {{ html.cssimport(url_for("static", filename="media/css/style.css"))|safe }}
         {{ html.cssimport(url_for("static", filename="media/css/pygments.css"))|safe }}
       {% endblock %}
       
       {% block js %}
-        {{ html.jsimport(url_for("static", filename="media/js/jquery.js")) | safe}}
+        {{ html.jsimport(url_for("static", filename="media/js/jquery.min.js")) | safe}}
+        {{ html.jsimport(url_for("static", filename="media/js/bootstrap.min.js")) | safe}}
       {% endblock %}
       
     {% endblock head %}
