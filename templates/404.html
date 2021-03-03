@@ -4,9 +4,8 @@
 
 {% block controls %}
 {{ controls.controls([
+		('home', true, '/wiki'),
 		('folder-open', true, './?directory'),
-		('file', true, '/newpage'),
-		('home', true, '/wiki')
 	]) | safe }}
 {% endblock controls %}
 
