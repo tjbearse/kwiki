@@ -97,7 +97,7 @@ def processWikiRequest(fullpath, crumbs):
             if raw is not None:
                 raw = raw.replace('\r\n', '\n')
                 print("writing {} with {}".format(fullpath, raw))
-                with open(fullpath, 'w') as f:
+                with open(fullpath, 'w', encoding="utf-8") as f:
                     f.write(raw)
             else:
                 abort(400)
