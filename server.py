@@ -95,6 +95,7 @@ def processWikiRequest(fullpath, crumbs):
     else:
         if flask.request.method == 'POST':
             if raw is not None:
+                raw = raw.replace('\r\n', '\n')
                 print("writing {} with {}".format(fullpath, raw))
                 with open(fullpath, 'w') as f:
                     f.write(raw)
