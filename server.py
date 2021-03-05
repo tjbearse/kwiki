@@ -44,7 +44,7 @@ def fileDispatch(path):
     type = fileOps.getFileType(fullpath)
     crumbs = fileOps.buildCrumbs(path)
     if type == fileOps.WIKI:
-        return processWikiRequest(fullpath, crumbs)
+        return processWikiRequest(fullpath, path, crumbs)
 
 
     elif type == fileOps.NON_WIKI:
@@ -85,7 +85,7 @@ def fileDispatch(path):
 def notMarkdown(path):
     return flask.send_file(path)
 
-def processWikiRequest(fullpath, crumbs):
+def processWikiRequest(fullpath, path, crumbs):
     raw = None
     if flask.request.method == 'POST':
         raw = flask.request.form.get('raw')
@@ -99,6 +99,7 @@ def processWikiRequest(fullpath, crumbs):
                 print("writing {} with {}".format(fullpath, raw))
                 with open(fullpath, 'w', encoding="utf-8") as f:
                     f.write(raw)
+                return flask.redirect(flask.url_for('fileDispatch', path=path), code=303)
             else:
                 abort(400)
         template = 'document.html'
