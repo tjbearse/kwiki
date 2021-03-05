@@ -51,10 +51,14 @@ def convertFromFile(file):
     return html, raw
 
 
+# copied from checklist extension and wrap text in span, allows styling checked / unchecked text
+def render_checklist_item(caption, checked):
+    checked = ' checked' if checked else ''
+    return '<li><input type="checkbox" disabled%s><span>%s</span></li>' % (checked, caption)
 
 extensions=[
         TocExtension(title='Table of Contents'),
-        ChecklistExtension(),
+        ChecklistExtension(render_item=render_checklist_item),
         Nl2BrExtension(),
         'markdown.extensions.tables'
         #NewTabExtension()
