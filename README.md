@@ -9,7 +9,7 @@ Download it alone and make it executable,
 curl -o kwiki.sh https://raw.githubusercontent.com/tjbearse/kwiki/master/kwiki.sh && chmod +x kwiki.sh
 ```
 
-Alternately, clone this repository.
+Alternatively, clone this repository.
 
 ### Running Kwiki
 To run kwiki, execute the kwiki script in a folder that has markdown or passing the folder as an argument. The start up script binds to a port chosen by docker and will to open the page in the browser when started.
