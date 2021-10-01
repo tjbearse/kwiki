@@ -1,9 +1,6 @@
 #/bin/bash
+# runs a kwiki container with the cwd or file argument mounted.
 set -ue
-# kwiki.sh runs a kwiki container with the cwd mounted. kwiki will be built if no tagged image exists
-
-scriptPath=$(dirname "$0")
-docker inspect kwiki >/dev/null 2>/dev/null || (cd "$scriptPath" && docker build -t kwiki .)
 
 if [ $# -eq 0 ]
 then
@@ -11,4 +8,9 @@ then
 else
 	path=$(realpath "$1")
 fi
-docker run --rm --publish 5000:5000 --mount "type=bind,src=${path},target=/home/files" kwiki
+container=$(docker run -d --rm -P --mount "type=bind,src=${path},target=/home/files" tjbearse/kwiki)
+address=$(docker port "$container" 5000 | head -1)
+address="http://${address}"
+echo -e "\nExposed as $address on the local machine\n"
+python -m webbrowser "$address" || true
+docker logs -f "$container"

@@ -1,5 +1,18 @@
 # Kwiki
-Kwiki provides a web interface to render and edit local markdown files. It can also render html, view text tiles, and list directories. To start kwiki, run the start script in a folder that has markdown `cd markdown/; /path/to/kwiki.sh` or by passing a folder as an argument `/path/to/kwiki.sh ./markdown`. Kwik starts on localhost:5000.
+Kwiki provides a web interface to render and edit local markdown files. It can also render html, view text tiles, and list directories. Kwiki is consumed as a docker container ([hub page](https://hub.docker.com/repository/docker/tjbearse/kwiki)).
+
+### Getting the Start Script
+Kwiki has a companion script to start the container quickly and properly.
+
+Download it alone and make it executable,
+```console
+curl -o kwiki.sh https://raw.githubusercontent.com/tjbearse/kwiki/master/kwiki.sh && chmod +x kwiki.sh
+```
+
+Alternately, clone this repository.
+
+### Running Kwiki
+To run kwiki, execute the kwiki script in a folder that has markdown or passing the folder as an argument. The start up script binds to a port chosen by docker and will to open the page in the browser when started.
 
 ## Usage Notes
 - Kwiki starts a development server meant to be used from your local computer. It is not meant for public or production access.
