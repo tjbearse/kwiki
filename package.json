@@ -4,7 +4,6 @@
   "description": "Start in a repo that has markdown e.g. `cd markdown/; python server.py`",
   "main": "index.js",
   "scripts": {
-    "static": "copyStatic.sh"
   },
   "repository": {
     "type": "git",
