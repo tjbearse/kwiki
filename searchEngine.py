@@ -2,6 +2,7 @@ import subprocess
 import flask
 import os
 import json
+from werkzeug.utils import safe_join
 
 import converter
 
@@ -20,7 +21,7 @@ def search(in_str, root):
             ret.append({
                 'filename': os.path.basename(name),
                 'path': os.path.split(name)[0],
-                'link': flask.safe_join('/wiki/', name),
+                'link': safe_join('/wiki/', name),
                 'matchtext': flask.Markup(
                         converter.txt2html(text)
                 )

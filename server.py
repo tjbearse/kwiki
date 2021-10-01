@@ -1,6 +1,7 @@
 import flask
 import os
 import sys
+from werkzeug.utils import safe_join
 
 import converter
 import fileOps
@@ -37,7 +38,7 @@ def root():
 @app.route('/wiki/', defaults={'path': ''}, methods=['GET', 'POST'])
 def fileDispatch(path):
 
-    fullpath = flask.safe_join(app.config['root'], path)
+    fullpath = safe_join(app.config['root'], path)
     ftype = fileOps.getFileType(fullpath)
     crumbs = fileOps.buildCrumbs(path)
     if ftype == fileOps.WIKI:
@@ -116,7 +117,7 @@ def listing(directory, route, crumbs):
     for f in os.listdir(directory):
         if f[0] == '.':
             continue
-        fullpath = flask.safe_join(directory, f)
+        fullpath = safe_join(directory, f)
         ftype = fileOps.getFileType(fullpath)
         if ftype == fileOps.WIKI:
             pages.append(fileOps.getFileInfo(f, fullpath, route))
@@ -138,7 +139,7 @@ def search():
     results = []
     search = flask.request.form.get('q')
     if search is not None:
-        path = flask.safe_join(app.config['root'], '')
+        path = safe_join(app.config['root'], '')
         results = searchEngine.search(search, path)
     return flask.render_template('search.html', query=search, results=results)
 

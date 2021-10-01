@@ -1,6 +1,7 @@
 import flask
 import os
 import datetime
+from werkzeug.utils import safe_join
 
 import converter
 
@@ -10,9 +11,9 @@ DIR = 'dir'
 
 def findIndex(fullpath, route):
     for ext in converter.getConvertableTypeExtensions():
-        ipath = flask.safe_join(fullpath, 'index' + ext)
+        ipath = safe_join(fullpath, 'index' + ext)
         if os.path.exists(ipath):
-            return flask.safe_join(route, 'index' + ext)
+            return safe_join(route, 'index' + ext)
     return None
 
 # req full path
@@ -29,7 +30,7 @@ def getFileType(path):
         return None
 
 def getDirInfo(d, relRoute):
-    path = flask.safe_join(relRoute, d)
+    path = safe_join(relRoute, d)
     return {
             "basename": d,
             "href": flask.url_for('fileDispatch', path=path)
@@ -52,7 +53,7 @@ def getFileInfo(file, fullpath, relRoute):
     return {
             "title": title,
             "basename": basename,
-            "href": flask.url_for('fileDispatch', path=flask.safe_join(relRoute, file)),
+            "href": flask.url_for('fileDispatch', path=safe_join(relRoute, file)),
             "humansize": size,
             "humantime": time
         }
