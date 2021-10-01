@@ -13,4 +13,4 @@ address=$(docker port "$container" 5000 | head -1)
 address="http://${address}"
 echo -e "\nExposed as $address on the local machine\n"
 python -m webbrowser "$address" || true
-docker logs -f "$container"
+docker logs -f "$container" || docker kill "$container" >/dev/null
