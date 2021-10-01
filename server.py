@@ -36,23 +36,19 @@ def root():
 @app.route('/wiki/<wiki:path>', methods=['GET', 'POST'])
 @app.route('/wiki/', defaults={'path': ''}, methods=['GET', 'POST'])
 def fileDispatch(path):
-    if '..' in path:
-        print('.. in path')
-        abort(404)
 
     fullpath = flask.safe_join(app.config['root'], path)
-    type = fileOps.getFileType(fullpath)
+    ftype = fileOps.getFileType(fullpath)
     crumbs = fileOps.buildCrumbs(path)
-    if type == fileOps.WIKI:
+    if ftype == fileOps.WIKI:
         return processWikiRequest(fullpath, path, crumbs)
 
-
-    elif type == fileOps.NON_WIKI:
+    elif ftype == fileOps.NON_WIKI:
         if flask.request.method == 'POST':
             abort(500)
-        return notMarkdown(fullpath)
+        return flask.send_file(fullpath)
 
-    elif type == fileOps.DIR:
+    elif ftype == fileOps.DIR:
         if path != '' and path[-1] != '/':
             return flask.redirect(flask.url_for('fileDispatch', path=path+'/'))
         if flask.request.method == 'POST':
@@ -82,9 +78,6 @@ def fileDispatch(path):
         print('fileDispatch', path, fullpath)
         flask.abort(404)
 
-def notMarkdown(path):
-    return flask.send_file(path)
-
 def processWikiRequest(fullpath, path, crumbs):
     raw = None
     if flask.request.method == 'POST':
@@ -105,8 +98,8 @@ def processWikiRequest(fullpath, path, crumbs):
         template = 'document.html'
 
     if raw is not None:
-        type = converter.getType(fullpath)
-        html = flask.Markup(converter.convert(raw, type))
+        ftype = converter.getType(fullpath)
+        html = flask.Markup(converter.convert(raw, ftype))
     else:
         html, raw = converter.convertFromFile(fullpath)
         html = flask.Markup(html)

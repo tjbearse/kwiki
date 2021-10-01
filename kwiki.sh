@@ -1,5 +1,6 @@
 #/bin/bash
 set -ue
+# kwiki.sh runs a kwiki container with the cwd mounted. kwiki will be built if no tagged image exists
 
 scriptPath=$(dirname "$0")
 docker inspect kwiki >/dev/null 2>/dev/null || (cd "$scriptPath" && docker build -t kwiki .)
