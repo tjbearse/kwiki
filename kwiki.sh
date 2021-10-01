@@ -8,7 +8,7 @@ then
 else
 	path=$(realpath "$1")
 fi
-container=$(docker run -d --rm -P --mount "type=bind,src=${path},target=/home/files" tjbearse/kwiki)
+container=$(docker run -d --rm -P --mount "type=bind,src=${path},target=/home/wiki" tjbearse/kwiki)
 address=$(docker port "$container" 5000 | head -1)
 address="http://${address}"
 echo -e "\nExposed as $address on the local machine\n"
