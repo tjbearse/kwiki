@@ -2,6 +2,24 @@
 # runs a kwiki container with the cwd or file argument mounted.
 set -ue
 
+print_usage() {
+	printf "usage: $0 [-h] [path]"
+}
+print_help() {
+	echo "runs a kwiki container with the cwd or file argument mounted."
+	print_usage
+}
+
+while getopts 'h' flag; do
+	case "${flag}" in
+		h)
+			print_help
+			exit ;;
+		*) print_usage
+		   exit 1 ;;
+	esac
+done
+
 if [ $# -eq 0 ]
 then
 	path=$(pwd)
