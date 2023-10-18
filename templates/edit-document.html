@@ -1,36 +1,88 @@
 {% extends 'base.html' %}
 
-{% block content_header %}
-<p class="bg-warning text-warning center-block text-center round">Editing... your changes may not be saved<p>
-{% endblock content_header %}
+{% block body %}
+	<div class="container-fluid wrapper big-round">
+		{% block body_header %}
+			<div class="">
+			{% block crumbs %}
+				<div class="pull-left">
+				{{ breadcrumbs.crumbs(crumbs)|safe }}
+				</div>
+			{% endblock crumbs %}
+			<div class="controls pull-right">
+				{% block controls %}
+				{{ controls.controls([
+						('search', true, '/search'),
+						('remove', true, '?'),
+					]) | safe }}
+				{% endblock controls %}
+			</div>
+			<hr class="clear"/>
+			</div>
+		{% endblock body_header %}
+		<form method="post" name="editpage" action="?">
+		<div id="content" class="">
+			<div class="clearfix">
+				{% block content_header %}
+				<div class="container-fluid">
+				  <div class="row">
+						<div class="col-md-1">
+							<a href="?" class="btn btn-danger">
+								<span class="glyphicon glyphicon-remove"></span>
+							</a>
+						</div>
+						<div class="col-md-9">
+							<div class="alert alert-warning">Editing... your changes may not be saved</div>
+						</div>
+						<div class="col-md-2">
+							<div class="form-group">
+								<button type="submit" class="btn btn-primary pull-right">
+									<span class="glyphicon glyphicon-ok"></span>
+								</button>
+								<button type="submit" id="preview-btn" formaction="?edit#edit-page-box" class="btn btn-default pull-right" style="margin-right: 8px">
+									<span class="glyphicon glyphicon-refresh"></span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endblock content_header %}
+			</div>
 
-{% block controls %}
-{{ controls.controls([
-		('search', true, '/search'),
-		('remove', true, '?'),
-	]) | safe }}
-{% endblock controls %}
+			{% block content %}
+			<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6">
+				{{ content }}
+				</div>
+				<div class="col-md-6">
+						<div class="form-group">
+							<textarea name="raw" id="edit-page-box" class="form-control">{{raw}}</textarea>
+						</div>
+				</div>
+			</div>
+			</div>
+			{% endblock %}
 
-{% block content %}
-<div>
-{{ content }}
-</div>
-<hr/>
-<form method="post" name="editpage" action="?">
-	<div class="form-group">
-		<a href="?" class="btn btn-danger">
-			<span class="glyphicon glyphicon-remove"></span>
-		</a>
+			{% block content_footer %}
+			{% endblock content_footer %}
 
-		<button type="submit" class="btn btn-primary pull-right">
-			<span class="glyphicon glyphicon-ok"></span>
-		</button>
-		<button type="submit" id="preview-btn" formaction="?edit#edit-page-box" class="btn btn-default pull-right" style="margin-right: 8px">
-			<span class="glyphicon glyphicon-refresh"></span>
-		</button>
+			<hr class="clear" />
+		</div> <!-- div#content -->
+		</form>
 	</div>
-	<div class="form-group">
-		<textarea name="raw" id="edit-page-box" class="form-control">{{raw}}</textarea>
+
+	{% block body_footer %}
+	<div id="footer">
+	<p>
+		{% if 'wiki-name' in config %}
+		{{ config['wiki-name']|e }} —
+		{% endif %}
+		Powered by TJ.
+	</p>
 	</div>
-</form>
-{% endblock %}
+	{% endblock body_footer %}
+
+{% endblock body %}
+
+
